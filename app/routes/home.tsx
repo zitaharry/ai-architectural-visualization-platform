@@ -19,12 +19,14 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
 
-  const handleUploadComplete = async (base64Image: string) => {
-    const newId = Date.now().toString();
+  const handleUploadComplete = (base64Image: string) => {
+    const newId = crypto.randomUUID();
 
-    navigate(`/visualizer/${newId}`);
+    localStorage.setItem(`uploadedImage:${newId}`, base64Image);
 
-    return true;
+    navigate(`/visualizer/${newId}`, {
+      state: { id: newId, base64: base64Image },
+    });
   };
 
   return (
