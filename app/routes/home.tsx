@@ -3,15 +3,30 @@ import Navbar from "../../components/Navbar";
 import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
+import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Roomify" },
+    {
+      name: "description",
+      content:
+        "an AI-first design environment that helps you visualize, render, and ship architectural projects faster than ever",
+    },
   ];
 }
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleUploadComplete = async (base64Image: string) => {
+    const newId = Date.now().toString();
+
+    navigate(`/visualizer/${newId}`);
+
+    return true;
+  };
+
   return (
     <div className="home">
       <Navbar />
@@ -54,8 +69,7 @@ export default function Home() {
               <h3>Upload your floor plan</h3>
               <p>Supports JPG, PNG, formats up to 10MB</p>
             </div>
-
-            <Upload />
+            <Upload onComplete={handleUploadComplete} />
           </div>
         </div>
       </section>
