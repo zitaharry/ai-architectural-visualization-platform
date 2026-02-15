@@ -4,8 +4,8 @@ import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
 import { useNavigate } from "react-router";
-import { useRef, useState } from "react";
-import { createProject } from "../../lib/puter.action";
+import { useEffect, useRef, useState } from "react";
+import { createProject, getProjects } from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "an AI-first design environment that helps you visualize, render, and ship architectural projects faster than ever",
+        "Roomify is an AI-first design environment that helps you visualize, render, and ship architectural projects faster than ever.",
     },
   ];
 }
@@ -64,6 +64,16 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const items = await getProjects();
+
+      setProjects(items);
+    };
+
+    fetchProjects();
+  }, []);
+
   return (
     <div className="home">
       <Navbar />
@@ -74,7 +84,7 @@ export default function Home() {
             <div className="pulse"></div>
           </div>
 
-          <p>Introducing Roomify 3.0</p>
+          <p>Introducing Roomify 2.0</p>
         </div>
 
         <h1>Build beautiful spaces at the speed of thought with Roomify</h1>
@@ -106,6 +116,7 @@ export default function Home() {
               <h3>Upload your floor plan</h3>
               <p>Supports JPG, PNG, formats up to 10MB</p>
             </div>
+
             <Upload onComplete={handleUploadComplete} />
           </div>
         </div>
