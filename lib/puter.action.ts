@@ -78,16 +78,17 @@ export const createProject = async ({
   };
 
   try {
-    const response = await puter.workers.exec(
-      `${PUTER_WORKER_URL}/api/projects/save`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          project: payload,
-          visibility,
-        }),
-      },
-    );
+    const baseUrl = PUTER_WORKER_URL.endsWith("/")
+      ? PUTER_WORKER_URL.slice(0, -1)
+      : PUTER_WORKER_URL;
+
+    const response = await puter.workers.exec(`${baseUrl}/api/projects/save`, {
+      method: "POST",
+      body: JSON.stringify({
+        project: payload,
+        visibility,
+      }),
+    });
 
     if (!response.ok) {
       console.error("failed to save the project", await response.text());
@@ -110,10 +111,13 @@ export const getProjects = async () => {
   }
 
   try {
-    const response = await puter.workers.exec(
-      `${PUTER_WORKER_URL}/api/projects/list`,
-      { method: "GET" },
-    );
+    const baseUrl = PUTER_WORKER_URL.endsWith("/")
+      ? PUTER_WORKER_URL.slice(0, -1)
+      : PUTER_WORKER_URL;
+
+    const response = await puter.workers.exec(`${baseUrl}/api/projects/list`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       console.error("Failed to fetch history", await response.text());
@@ -138,8 +142,12 @@ export const getProjectById = async ({ id }: { id: string }) => {
   console.log("Fetching project with ID:", id);
 
   try {
+    const baseUrl = PUTER_WORKER_URL.endsWith("/")
+      ? PUTER_WORKER_URL.slice(0, -1)
+      : PUTER_WORKER_URL;
+
     const response = await puter.workers.exec(
-      `${PUTER_WORKER_URL}/api/projects/get?id=${encodeURIComponent(id)}`,
+      `${baseUrl}/api/projects/get?id=${encodeURIComponent(id)}`,
       { method: "GET" },
     );
 
